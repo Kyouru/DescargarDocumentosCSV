@@ -201,14 +201,16 @@ namespace DescargarDocAcceso
 
                 using (var stream = fileResp.GetResponseStream())
                 {
-                    string extension = fileResp.ContentType.Split('/')[1];
-                    if (extension == "x-compressed-tar")
+                    //string extension = fileResp.ContentType.Split('/')[1];
+                    string extension = "";
+
+                    if (listaExtension.ContainsKey(fileResp.ContentType.ToLower()))
                     {
-                        extension = "tar.gz";
+                        extension = listaExtension[fileResp.ContentType.ToLower()];
                     }
-                    else if (extension == "x-rar")
+                    else
                     {
-                        extension = "rar"; 
+                        extension = fileResp.ContentType.Split('/')[1];
                     }
                     int cont = 1;
                     string path = filePath + "\\" + fileName + "." + extension;
@@ -299,5 +301,89 @@ namespace DescargarDocAcceso
         {
             return value.All(char.IsNumber);
         }
+
+
+        static public Dictionary<string, string> listaExtension = new Dictionary<string, string>()
+        {
+            {"text/plain","TXT"},
+            {"image/tiff","TIFF"},
+            {"application/x-bittorrent","TORRENT"},
+            {"application/x-font-ttf","TTF"},
+            {"application/x-cdlink","VCD"},
+            {"text/x-vcard","VCF"},
+            {"application/xml","XML"},
+            {"audio/x-wav","WAV"},
+            {"audio/x-ms-wma","WMA"},
+            {"video/x-ms-wmv","WMV"},
+            {"application/wordperfect","WPD"},
+            {"application/xhtml+xml","XHTML"},
+            {"application/vnd.ms-excel","XLS"},
+            {"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet","XLSX"},
+            {"text/xml","XML"},
+            {"video/3gpp2","3G2"},
+            {"video/3gpp","3GP"},
+            {"application/illustrator","AI"},
+            {"audio/x-aiff","AIF"},
+            {"application/vnd.android.package-archive","APK"},
+            {"video/x-ms-asf","ASF"},
+            {"video/x-msvideo","AVI"},
+            {"image/bmp","BMP"},
+            {"text/x-csrc","C"},
+            {"application/x-x509-ca-cert","CER"},
+            {"text/x-c++src","CPP"},
+            {"application/x-chrome-extension","CRX"},
+            {"text/css","CSS"},
+            {"text/csv","CSV"},
+            {"image/vnd.ms-dds","DDS"},
+            {"application/x-debian-package","DEB"},
+            {"application/msword","DOC"},
+            {"application/vnd.openxmlformats-officedocument.wordprocessingml.document","DOCX"},
+            {"application/xml-dtd","DTD"},
+            {"application/dxf","DXF"},
+            {"video/x-flv","FLV"},
+            {"application/octet-stream+fnt","FNT"},
+            {"application/octet-stream+fon","FON"},
+            {"image/gif","GIF"},
+            {"application/gpx+xml","GPX"},
+            {"application/x-gzip","GZ"},
+            {"text/x-chdr","H"},
+            {"application/mac-binhex40","HQX"},
+            {"text/html","HTML"},
+            {"image/x-icon","ICO"},
+            {"text/calendar","ICS"},
+            {"image/jpeg","JPG"},
+            {"application/vnd.google-earth.kml+xml","KML"},
+            {"application/vnd.google-earth.kmz","KMZ"},
+            {"audio/x-mpegurl","M3U"},
+            {"audio/mp4","M4A"},
+            {"video/x-m4v","M4V"},
+            {"audio/midi","MID"},
+            {"video/quicktime","MOV"},
+            {"audio/mpeg","MP3"},
+            {"video/mp4","MP4"},
+            {"video/mpeg","MPG"},
+            {"application/vnd.oasis.opendocument.text","ODT"},
+            {"application/vnd.oasis.opendocument.formula-template","OTF"},
+            {"application/x-iwork-pages-sffpages","PAGES"},
+            {"chemical/x-pdb","PDB"},
+            {"application/pdf","PDF"},
+            {"application/x-httpd-php","PHP"},
+            {"image/png","PNG"},
+            {"application/vnd.ms-powerpoint","PPT"},
+            {"application/vnd.openxmlformats-officedocument.presentationml.presentation","PPTX"},
+            {"application/pics-rules","PRF"},
+            {"application/postscript","PS"},
+            {"application/photoshop","PSD"},
+            {"audio/x-pn-realaudio","RM"},
+            {"application/x-rpm","RPM"},
+            {"application/rtf","RTF"},
+            {"application/x-sh","SH"},
+            {"image/svg+xml","SVG"},
+            {"application/x-shockwave-flash","SWF"},
+            {"application/x-tex","TEX"},
+            {"x-compressed-tar","TAR.GZ"},
+            {"x-rar","RAR"}
+        };
+
     }
 }

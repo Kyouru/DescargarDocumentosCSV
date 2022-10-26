@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
 using System.Windows.Threading;
+using static System.Net.WebRequestMethods;
 
 namespace DescargarDocAcceso
 {
@@ -32,7 +33,7 @@ namespace DescargarDocAcceso
             dterror.Columns.Add("ID");
             dterror.Columns.Add("COD");
             dterror.Columns.Add("TIPO");
-            dterror.Columns.Add("ERROR");
+            dterror.Columns.Add("STATUS");
             dterror.Columns.Add("URL");
         }
 
@@ -126,7 +127,8 @@ namespace DescargarDocAcceso
                 int urlcol = Int32.Parse(tbColumnaURL.Text) - 1;
                 int contador = 0;
                 dterror.Rows.Clear();
-                lbProgreso.Invoke((MethodInvoker)delegate {
+                lbProgreso.Invoke((MethodInvoker)delegate
+                {
                     lbProgreso.Text = contador + " de " + dt.Rows.Count.ToString();
                 });
                 DataRow[] foundRows;
@@ -149,22 +151,16 @@ namespace DescargarDocAcceso
                         cod = (maxrowcod).ToString().PadLeft(3, '0');
                     }
                     string result = Functions.SaveUrlToFile(dr[urlcol].ToString(), Path.Combine(rutadescarga, dr[idcol].ToString()), cod);
-                    if (result != "OK")
+                    using (StreamWriter sw = System.IO.File.AppendText(Path.Combine(System.Windows.Forms.Application.StartupPath, "log.txt")))
                     {
-                        DataRow drerror = dterror.NewRow();
-                        drerror["ID"] = dr[idcol].ToString();
-                        drerror["COD"] = cod;
-                        drerror["TIPO"] = dr[tipocol].ToString();
-                        drerror["ERROR"] = result;
-                        drerror["URL"] = dr[urlcol].ToString();
-                        dterror.Rows.Add(drerror);
-                        dgv.Invoke((MethodInvoker)delegate {
-                            dgv.DataSource = null;
-                            dgv.DataSource = dterror;
-                        });
+                        if (result != "OK")
+                            sw.WriteLine(dr[idcol].ToString().Trim() + ";" + cod + ";" + dr[tipocol].ToString().Trim() + ";" + result.Trim() + ";" + dr[urlcol].ToString().Replace("\r", "").Replace("\n", "").Replace("\r\n", "").Trim() + ";");
+                        else
+                            sw.WriteLine(dr[idcol].ToString().Trim() + ";" + cod + ";" + dr[tipocol].ToString().Trim() + ";OK;" + dr[urlcol].ToString().Replace("\r", "").Replace("\n", "").Replace("\r\n", "").Trim() + ";");
                     }
                     contador++;
-                    lbProgreso.Invoke((MethodInvoker)delegate {
+                    lbProgreso.Invoke((MethodInvoker)delegate
+                    {
                         lbProgreso.Text = contador + " de " + dt.Rows.Count.ToString();
                     });
                 }
@@ -188,5 +184,6 @@ namespace DescargarDocAcceso
                 MessageBox.Show("dgv vacio");
             }
         }
+
     }
 }
