@@ -381,9 +381,9 @@ namespace DescargarDocAcceso
             {"image/svg+xml","SVG"},
             {"application/x-shockwave-flash","SWF"},
             {"application/x-tex","TEX"},
-            {"x-compressed-tar","TAR.GZ"},
-            {"x-rar","RAR"}
+            {"application/x-compressed-tar","TAR.GZ"},
+            {"application/x-rar","RAR"},
+            {"application/vnd.oasis.opendocument.spreadsheet", "ODS" }
         };
-
     }
 }
